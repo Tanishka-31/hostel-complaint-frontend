@@ -15,13 +15,14 @@ function Login() {
         { email, password }
       );
 
+      // ✅ IMPORTANT: Save user in localStorage
+      localStorage.setItem("user", JSON.stringify(res.data));
+
       alert(res.data.msg);
 
-      if (res.data.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/dashboard");
-      }
+      // Redirect to dashboard
+      navigate("/dashboard");
+
     } catch (err) {
       console.error("Login Error:", err);
       alert("Login failed ❌");

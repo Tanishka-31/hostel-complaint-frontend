@@ -4,10 +4,14 @@ import Navbar from "./Navbar";
 import "./Signup.css";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
   const [stats, setStats] = useState({ total: 0, pending: 0, resolved: 0 });
 
   const loadData = useCallback(async () => {
+    if (!user) return;
+
     try {
       const url =
         user.role === "admin"
@@ -19,8 +23,8 @@ function Dashboard() {
 
       setStats({
         total: data.length,
-        pending: data.filter(c => c.status === "Pending").length,
-        resolved: data.filter(c => c.status === "Resolved").length,
+        pending: data.filter((c) => c.status === "Pending").length,
+        resolved: data.filter((c) => c.status === "Resolved").length,
       });
     } catch (err) {
       console.error("Dashboard load error", err);
@@ -31,13 +35,23 @@ function Dashboard() {
     loadData();
   }, [loadData]);
 
+  if (!user) {
+    return (
+      <div style={{ padding: "40px", color: "white" }}>
+        <h2>User not found. Please login again.</h2>
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
       <div className="container">
         <div className="card">
           <h2>
-            {user.role === "admin" ? "Admin Dashboard 👑" : "User Dashboard"}
+            {user.role === "admin"
+              ? "Admin Dashboard 👑"
+              : "User Dashboard"}
           </h2>
 
           <div className="stat-row">
