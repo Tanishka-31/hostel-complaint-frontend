@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "./Signup.css";
+import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -11,14 +11,19 @@ function Login() {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://hostel-complaint-backend-q3ep.onrender.com/api/auth/login",
         { email, password }
       );
 
-      localStorage.setItem("user", JSON.stringify(res.data.user));
       alert(res.data.msg);
-      navigate("/dashboard");
+
+      if (res.data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
+      console.error("Login Error:", err);
       alert("Login failed ❌");
     }
   };
@@ -29,6 +34,7 @@ function Login() {
         <h2>Hostel Complaint System</h2>
 
         <input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

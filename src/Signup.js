@@ -13,12 +13,14 @@ function Signup() {
   const handleSignup = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "https://hostel-complaint-backend-q3ep.onrender.com/api/auth/signup",
         { role, name, email, password }
       );
+
       alert(res.data.msg);
       navigate("/");
-    } catch {
+    } catch (err) {
+      console.error("Signup Error:", err);
       alert("Signup failed ❌");
     }
   };
@@ -35,6 +37,7 @@ function Signup() {
           >
             Resident
           </button>
+
           <button
             className={role === "admin" ? "active" : ""}
             onClick={() => setRole("admin")}
@@ -43,11 +46,23 @@ function Signup() {
           </button>
         </div>
 
-        <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
         <input
           type="password"
           placeholder="Password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
