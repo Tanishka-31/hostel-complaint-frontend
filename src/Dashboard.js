@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
-import "./Signup.css";
+import "./Dashboard.css";
 
 function Dashboard() {
   const storedUser = localStorage.getItem("user");
@@ -37,8 +37,8 @@ function Dashboard() {
 
   if (!user) {
     return (
-      <div style={{ padding: "40px", color: "white" }}>
-        <h2>User not found. Please login again.</h2>
+      <div className="dashboard-center">
+        <h2>Please login again</h2>
       </div>
     );
   }
@@ -46,28 +46,26 @@ function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="container">
-        <div className="card">
-          <h2>
-            {user.role === "admin"
-              ? "Admin Dashboard 👑"
-              : "User Dashboard"}
-          </h2>
+      <div className="dashboard-container">
+        <h2 className="dashboard-title">
+          {user.role === "admin"
+            ? "Admin Dashboard 👑"
+            : "User Dashboard 👤"}
+        </h2>
 
-          <div className="stat-row">
-            <StatBox label="Total" value={stats.total} />
-            <StatBox label="Pending" value={stats.pending} />
-            <StatBox label="Resolved" value={stats.resolved} />
-          </div>
+        <div className="stats-grid">
+          <StatBox label="Total Complaints" value={stats.total} color="#6a11cb" />
+          <StatBox label="Pending" value={stats.pending} color="#ff9800" />
+          <StatBox label="Resolved" value={stats.resolved} color="#4caf50" />
         </div>
       </div>
     </>
   );
 }
 
-function StatBox({ label, value }) {
+function StatBox({ label, value, color }) {
   return (
-    <div className="stat-box">
+    <div className="stat-card" style={{ borderTop: `5px solid ${color}` }}>
       <h3>{value}</h3>
       <p>{label}</p>
     </div>
