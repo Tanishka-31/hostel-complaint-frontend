@@ -4,34 +4,48 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Signup.css";
 
 function Signup() {
+
   const [role, setRole] = useState("resident");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
     try {
       const res = await axios.post(
         "https://hostel-complaint-backend-q3ep.onrender.com/api/auth/signup",
         { role, name, email, password }
       );
 
-      alert(res.data.msg);
+      alert(res.data.msg || "Signup successful 🎉");
       navigate("/");
+
     } catch (err) {
-      console.error("Signup Error:", err);
-      alert("Signup failed ❌");
+      console.error("ERROR:", err.response?.data || err);
+      alert(err.response?.data?.msg || "Signup failed ❌");
     }
   };
 
   return (
     <div className="container">
-      <div className="card">
+
+      <form className="card" onSubmit={handleSignup}>
+
         <h2>Create Account</h2>
 
         <div className="role-toggle">
+
           <button
+            type="button"
             className={role === "resident" ? "active" : ""}
             onClick={() => setRole("resident")}
           >
@@ -39,11 +53,13 @@ function Signup() {
           </button>
 
           <button
+            type="button"
             className={role === "admin" ? "active" : ""}
             onClick={() => setRole("admin")}
           >
             Admin
           </button>
+
         </div>
 
         <input
@@ -66,14 +82,16 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="main-btn" onClick={handleSignup}>
+        <button type="submit" className="main-btn">
           Signup
         </button>
 
         <p className="link">
           Already have account? <Link to="/">Login</Link>
         </p>
-      </div>
+
+      </form>
+
     </div>
   );
 }

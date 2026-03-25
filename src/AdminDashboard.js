@@ -1,83 +1,95 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
-import "./Signup.css";
+import "./AdminDashboard.css";
 
 function AdminDashboard() {
-  const [complaints, setComplaints] = useState([]);
 
+  const [complaints, setComplaints] = useState([]);
+  const [loadingId, setLoadingId] = useState(null); // 🔥 loading state
+
+  // 🔥 Fetch complaints
   useEffect(() => {
-    fetchComplaints();
+    const fetchAll = async () => {
+      try {
+        const res = await axios.get(
+          "https://hostel-complaint-backend-q3ep.onrender.com/api/complaints"
+        );
+        setComplaints(res.data);
+      } catch (err) {
+        console.log("Error loading complaints", err);
+      }
+    };
+
+    fetchAll();
   }, []);
 
-  const fetchComplaints = async () => {
+  // 🔥 Resolve function
+  const handleResolve = async (id) => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/complaints"
-      );
-      setComplaints(res.data);
-    } catch (err) {
-      alert("Failed to load complaints ❌");
-    }
-  };
 
-  const updateStatus = async (id, status) => {
-    try {
+      setLoadingId(id); // start loading
+
       await axios.put(
-        `http://localhost:5000/api/complaints/${id}`,
-        { status }
+        `https://hostel-complaint-backend-q3ep.onrender.com/api/complaints/${id}`,
+        { status: "Resolved" }
       );
-      fetchComplaints(); // refresh list
+
+      // update UI instantly
+      setComplaints(prev =>
+        prev.map(c =>
+          c._id === id ? { ...c, status: "Resolved" } : c
+        )
+      );
+
     } catch (err) {
-      alert("Failed to update status ❌");
+      console.log("Error updating status", err);
+    } finally {
+      setLoadingId(null); // stop loading
     }
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <div className="card" style={{ width: "90%" }}>
-          <h2>Admin Dashboard</h2>
+    <div className="admin-container">
 
-          {complaints.length === 0 ? (
-            <p>No complaints found.</p>
-          ) : (
-            <table style={{ width: "100%", marginTop: "15px" }}>
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
+      <h2 className="admin-title">Admin Dashboard 👑</h2>
 
-              <tbody>
-                {complaints.map((c) => (
-                  <tr key={c._id}>
-                    <td>{c.category}</td>
-                    <td>{c.description}</td>
-                    <td>{c.status}</td>
-                    <td>
-                      {c.status === "Pending" && (
-                        <button
-                          onClick={() =>
-                            updateStatus(c._id, "Resolved")
-                          }
-                        >
-                          Mark Resolved
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+      <div className="complaint-grid">
+
+        {complaints.map((c) => (
+
+          <div className="complaint-card" key={c._id}>
+
+            <h3>{c.category}</h3>
+
+            <p><strong>User:</strong> {c.userId?.name}</p>
+            <p><strong>Email:</strong> {c.userId?.email}</p>
+
+            <p className="desc">{c.description}</p>
+
+            <span className={`status ${c.status.toLowerCase()}`}>
+              {c.status}
+            </span>
+
+            {/* 🔥 button only if pending */}
+            {c.status === "Pending" && (
+              <button
+                className="resolve-btn"
+                onClick={() => handleResolve(c._id)}
+                disabled={loadingId === c._id}
+              >
+                {loadingId === c._id
+                  ? "Updating..."
+                  : "Mark Resolved ✅"}
+              </button>
+            )}
+
+          </div>
+
+        ))}
+
       </div>
-    </>
+
+    </div>
   );
 }
 

@@ -1,71 +1,69 @@
-import { useState } from "react";
+import {useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "./Signup.css";
 
-function ComplaintForm() {
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const navigate = useNavigate();
+function ComplaintForm(){
 
-  // 👉 user automatically from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+const [category,setCategory]=useState("");
+const [description,setDescription]=useState("");
 
-  const handleSubmit = async () => {
-    if (!category || !description) {
-      alert("Please fill all fields");
-      return;
-    }
+const stored=JSON.parse(localStorage.getItem("user"));
+const user=stored?.user;
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/complaints",
-        {
-          userId: user.id,
-          category,
-          description,
-        }
-      );
+const navigate=useNavigate();
 
-      alert(res.data.msg);
+const handleSubmit=async()=>{
 
-      // 👉 complaint submit ke baad my complaints page
-      navigate("/my-complaints");
-    } catch (err) {
-      alert(err.response?.data?.msg || "Failed to submit complaint ❌");
-    }
-  };
+if(!category || !description){
+alert("Fill all fields");
+return;
+}
 
-  return (
-    <div className="container">
-      <div className="card">
-        <h2>Raise a Complaint</h2>
+await axios.post(
+"https://hostel-complaint-backend-q3ep.onrender.com/api/complaints",
+{
+userId:user.id,
+category,
+description
+}
+);
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Select Category</option>
-          <option value="Water">Water</option>
-          <option value="Food">Food</option>
-          <option value="Electricity">Electricity</option>
-          <option value="Cleanliness">Cleanliness</option>
-          <option value="Other">Other</option>
-        </select>
+alert("Complaint submitted");
 
-        <textarea
-          placeholder="Describe your issue..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows="4"
-        />
+navigate("/my-complaints");
 
-        <button className="main-btn" onClick={handleSubmit}>
-          Submit Complaint
-        </button>
-      </div>
-    </div>
-  );
+};
+
+return(
+
+<div className="container">
+<div className="card">
+
+<h2>Raise Complaint</h2>
+
+<select onChange={(e)=>setCategory(e.target.value)}>
+<option value="">Category</option>
+<option>Water</option>
+<option>Food</option>
+<option>Electricity</option>
+<option>Cleanliness</option>
+</select>
+
+<textarea
+placeholder="describe issue"
+onChange={(e)=>setDescription(e.target.value)}
+/>
+
+<button onClick={handleSubmit}>
+Submit Complaint
+</button>
+
+</div>
+</div>
+
+);
+
 }
 
 export default ComplaintForm;

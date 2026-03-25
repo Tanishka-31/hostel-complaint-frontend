@@ -1,3 +1,10 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Container */
 .container {
   min-height: 100vh;
   display: flex;
@@ -5,127 +12,64 @@
   align-items: center;
 }
 
-/* MAIN CARD */
+/* Card */
 .card {
-  background: #ffffff;
-  padding: 35px;
-  width: 400px;
-  border-radius: 18px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 15px;
   text-align: center;
-  animation: fadeUp 0.6s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Heading */
 .card h2 {
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: #777;
   margin-bottom: 20px;
 }
 
-/* INPUTS */
+/* Inputs */
 input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 14px;
-  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
 }
 
-input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-/* BUTTON */
+/* Main Button */
 .main-btn {
   width: 100%;
-  padding: 12px;
-  border-radius: 30px;
+  padding: 10px;
+  border-radius: 25px;
   border: none;
-  font-size: 15px;
-  cursor: pointer;
-  color: white;
   background: linear-gradient(90deg, #667eea, #764ba2);
-  transition: 0.3s;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-.main-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-
-/* LINKS */
-.link {
-  margin-top: 15px;
-  font-size: 14px;
-}
-
-.link a {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-/* ROLE TOGGLE */
+/* Role Toggle */
 .role-toggle {
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .role-toggle button {
   flex: 1;
-  padding: 9px;
-  border-radius: 25px;
+  padding: 8px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
   background: #eee;
 }
 
 .role-toggle .active {
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: #667eea;
   color: white;
 }
 
-/* DASHBOARD STATS */
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.stat-box {
-  background: #f6f7fb;
-  padding: 18px;
-  border-radius: 14px;
-  width: 100px;
-  text-align: center;
-}
-
-.stat-box h3 {
-  margin: 0;
-  color: #667eea;
-}
-
-.stat-box p {
-  margin: 5px 0 0;
-  font-size: 13px;
-  color: #555;
+/* Link */
+.link {
+  margin-top: 10px;
 }
